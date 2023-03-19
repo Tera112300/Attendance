@@ -1,0 +1,35 @@
+.bca-btn.bca-btn-next[data-bca-btn-type="back-to-list"]::before{
+    transform: rotate(-180deg);
+}
+#ListTable tbody tr.no_link{
+    pointer-events: none;
+}
+body[id^="AdminAttendanceAttendance"] .screen_hide{
+    display: none;
+}
+@media print{
+    /* パラメータがあると変わるため頭がAdminAttendanceAttendance */
+    @page { margin: 0; }
+    body[id^="AdminAttendanceAttendance"] .screen_hide{
+        display: block;
+    }
+    body[id^="AdminAttendanceAttendance"]{
+        -webkit-print-color-adjust: exact;
+        margin: 0 !important; 
+        padding: 0 !important;
+    }
+    body[id^="AdminAttendanceAttendance"] .bca-toolbar,
+    body[id^="AdminAttendanceAttendance"] #SideBar,
+    body[id^="AdminAttendanceAttendance"] .bca-main__header-menu,
+    body[id^="AdminAttendanceAttendance"] .bca-data-list__top,
+    body[id^="AdminAttendanceAttendance"] .bca-footer__inner--full{
+        display: none !important;
+    }
+    body[id^="AdminAttendanceAttendance"] .bca-table-listup__tbody-td{
+        line-height: 1.4;
+    } 
+    body[id^="AdminAttendanceAttendance"] .bca-table-listup__thead-th, .bca-table-listup__tbody-th, .bca-table-listup__tbody-td{
+        padding: 0.5em;
+    }
+}
+
