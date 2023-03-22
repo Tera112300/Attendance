@@ -19,6 +19,7 @@ class AttendanceController extends AttendanceAdminAppController
 
     public function index()
     {
+
         $currentDateTime = new \DateTime();
         $currentDateTime_format = $currentDateTime->format('Y-m-d');
        
@@ -35,13 +36,17 @@ class AttendanceController extends AttendanceAdminAppController
                 $post_data = $this->Attendance->newEmptyEntity();
                 $post_data->user_id = BcUtil::loginUser()->id;
                 $post_data->start_time = $currentDateTime->format('Y-m-d H:i:s');
-                $data = $this->Attendance->save($post_data);
-                $this->BcMessage->setInfo('出勤を押しました。');
+                
+                if($data = $this->Attendance->save($post_data)){
+                    $this->BcMessage->setInfo('出勤を押しました。');
+                }
+                
             } elseif ($this->getRequest()->getData('leaving') == 1 && $data && !isset($data->end_time)) {
                 $data->end_time = $currentDateTime->format('Y-m-d H:i:s');
                 $data->status = 1;
-                $data = $this->Attendance->save($data);
-                $this->BcMessage->setInfo('退勤を押しました。');
+                if($data = $this->Attendance->save($data)){
+                    $this->BcMessage->setInfo('退勤を押しました。');
+                }
             }
             return $this->redirect(['action' => 'index']);
         }
@@ -69,8 +74,6 @@ class AttendanceController extends AttendanceAdminAppController
             }
         ])->all()->toArray();
         
-        
-       
         $this->set(compact("data","daysOfMonth","date"));
         $this->set(["user" => BcUtil::loginUser()]);
   
@@ -98,8 +101,9 @@ class AttendanceController extends AttendanceAdminAppController
             if (!$data->getErrors()) {
                 $data->start_time = $date->format('Y-m-d')." ".$this->getRequest()->getData("start_time");
                 $data->end_time = $date->format('Y-m-d')." ".$this->getRequest()->getData("end_time");
-                $data = $this->Attendance->save($data);
-                $this->BcMessage->setInfo('新規作成しました。');
+                if($data = $this->Attendance->save($data)){
+                    $this->BcMessage->setInfo('新規作成しました。');
+                }
                 return $this->redirect(['action' => 'list']);
             }
             $this->BcMessage->setError("入力エラーです。内容を修正してください。");
@@ -118,8 +122,9 @@ class AttendanceController extends AttendanceAdminAppController
         
         if ($this->request->is(['post', 'put'])) {
             $data->remarks = $this->getRequest()->getData('remarks');
-            $data = $this->Attendance->save($data);
+           if($data = $this->Attendance->save($data)){
             $this->BcMessage->setInfo('備考を更新しました。');
+           }  
         }
         $this->set(compact("data"));
     }
